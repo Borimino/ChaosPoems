@@ -14,7 +14,7 @@ public class Window
 {
 	JFrame frame;
 	JTextArea input;
-	JLabel output;
+	JTextArea output;
 	JPanel buttons;
 	JButton generate;
 	JButton clear;
@@ -32,7 +32,8 @@ public class Window
 		input = new JTextArea(25, 50);
 		frame.getContentPane().add(input);
 		addButtons();
-		output = new JLabel();
+		output = new JTextArea();
+		output.setEditable(false);
 		frame.getContentPane().add(output);
 		frame.pack();
 		frame.setVisible(true);
@@ -48,7 +49,7 @@ public class Window
 			{
 				public void actionPerformed(ActionEvent e)
 				{
-					output.setText(input.getText());
+					output.setText(Main.generate(input.getText()));
 				}
 			});
 		clear = new JButton("Clear");
