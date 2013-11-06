@@ -1,6 +1,7 @@
 package chaosPoems;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -57,16 +58,27 @@ public class SearchEngine {
 
 		
 		for(String s : temp){
-			res.add(resultsplitter(s, keywords));//Cuts off anything before keywords
+			res.add(resultsplitter(s, keywords));//Cuts off anything before keywords and shotenes the strings
 			
 		}
 		
-		if(res.size() == 0) return cutOfKeywordsAndSearch(keywords);
+		
+		// Kills results whichs matches keywords
+				Iterator<String> itr = res.iterator();
+				while (itr.hasNext()) {
+					String s = (String) itr.next();
 
-		if(res.size() > numberofresults) res.subList(numberofresults, res.size()).clear();
+					if (s.equalsIgnoreCase(keywords)) {
+						itr.remove();
+					}
+
+				}
+		
+		
+		if(res.size() == 0) return cutOfKeywordsAndSearch(keywords); 
+
+		if(res.size() > numberofresults) res.subList(numberofresults, res.size()).clear(); //Cutts arrayliost down to the size of threshold
 			
-		
-		
 		return res;
 	
 	}
@@ -205,15 +217,61 @@ public class SearchEngine {
 	private String resultsplitter(String tobesplit, String keywords) {
 
 		int l = keywords.length();
-		int i = tobesplit.toLowerCase().indexOf(keywords.toLowerCase(), 0);
+		int i = tobesplit.toLowerCase().indexOf(keywords.toLowerCase(), 0); // finds the place to cut the string
 		int sl = tobesplit.length();
+		
+		String temp = tobesplit.substring((i + l), sl); // Removes anything preceding keywords
+		
+		
+		int d = 0;
+		if(countChar(temp, '.') >= 3) d = nthOccurrence(temp, '.', 3) + 1; //if more than three dots cut by the third
+		if(countChar(temp, '.') < 3) d = temp.lastIndexOf('.') + 1; // if less or equal to three dots cut by last dot 
+		
+		//If the string containms one of folowing cut after it
+		
+		if(temp.contains("|")){
+			
+			d = temp.lastIndexOf("|");
 
-		String res = tobesplit.substring((i + l), sl);
+		} else if(temp.length() > 1000) { // Hvis længden er større en 1000 cut ved 1 punktum
+			
+			d = temp.indexOf('.');
+			
+		} else if(temp.contains("?")){
+
+			d = temp.lastIndexOf("?") + 1;
+			
+		} else if(temp.contains("!")){
+			
+			d = temp.lastIndexOf("!") + 1;
+			
+		}
+
+		
+		String res = temp.substring(0,d);
 
 		if(withkeywords) return keywords + res;
 			
 		return res;
 
+	}
+	
+	private int nthOccurrence(String str, char c, int n) {
+	    int pos = 0;
+	    while (n-- > 0 && pos != -1)
+	        pos = str.indexOf(c, pos+1);
+	    return pos;
+	}
+	
+	private int countChar(String str, char c){
+
+		int count = 0;
+		for(int i = 0; i < str.length(); i++){
+			if(str.charAt(i) == c) count ++;
+			
+		}
+		
+		return count;
 	}
 
 	// GETTERS AND SETTERS

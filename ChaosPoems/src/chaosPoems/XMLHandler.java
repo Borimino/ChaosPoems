@@ -1,6 +1,7 @@
 package chaosPoems;
 
 import java.lang.StringBuffer;
+import java.net.ConnectException;
 import java.net.URL;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -54,7 +55,9 @@ public class XMLHandler extends DefaultHandler {
 			se.printStackTrace();
 		} catch (ParserConfigurationException pce) {
 			pce.printStackTrace();
-		} catch (IOException ie) {
+		}catch (ConnectException e) {
+		    e.printStackTrace();
+		}catch (IOException ie) {
 			ie.printStackTrace();
 		}
 			

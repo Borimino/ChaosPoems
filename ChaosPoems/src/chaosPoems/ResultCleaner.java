@@ -11,14 +11,21 @@ public class ResultCleaner {
 	public ResultCleaner() {
 
 		// Array with strings to be removed
-		dirt = new String[4];
+		dirt = new String[7];
 		dirt[0] = "<span class='searchmatch'>";
 		dirt[1] = "</span>";
 		dirt[2] = "\"";
 		dirt[3] = "<b>...</b>";
+		dirt[4] = "</div>";
+		dirt[5] = "<br />";
+		dirt[6] = "<div>";
+
+		
+		
+		//TODO Maybe add posibility for regEx!
 
 		// The lines which contains following strings will be deleted
-		linesToBeKilled = new String[8];
+		linesToBeKilled = new String[14];
 		linesToBeKilled[0] = "Sindice search:";
 		linesToBeKilled[1] = "OR description:";
 		linesToBeKilled[2] = "http://";
@@ -27,6 +34,15 @@ public class ResultCleaner {
 		linesToBeKilled[5] = "Ã";
 		linesToBeKilled[6] = "¥";
 		linesToBeKilled[7] = "ö";
+		linesToBeKilled[8] = "forgjeves";
+		linesToBeKilled[9] = "blitt ";
+		linesToBeKilled[10] = "och ";
+		linesToBeKilled[11] = "gjør";
+		linesToBeKilled[12] = "gjør";
+		linesToBeKilled[13] = " av ";
+
+		
+
 		
 		
 
@@ -110,6 +126,7 @@ public class ResultCleaner {
 		
 		if((containingline.length()/keywords.length()) < 3) res = true; // Check length of lines
 		
+		if(!containingline.contains(".")) res = true;
 
 		return res;
 
