@@ -1,8 +1,10 @@
 package chaosPoems;
 
 import java.util.ArrayList;
+import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.net.URLEncoder;
 
 public class SearchEngine {
 
@@ -104,8 +106,19 @@ public class SearchEngine {
 	 */
 	private URL constructSindiceURL(String keywords) {
 
-		String k = "\"" + keywords.replaceAll(" ", "+") + "\"";
-
+		String l = "";
+		try {
+			l = URLEncoder.encode(keywords, "UTF-8");
+		} catch (UnsupportedEncodingException e1) {
+			
+			l = keywords;
+			
+			e1.printStackTrace();
+		}
+		
+		String k = "\"" + l.toLowerCase().replaceAll(" ", "+") + "\"";
+		
+		
 		try {
 			URL url = new URL("http://api.sindice.com/v2/search?q=" + k
 					+ "&qt=term&page=1&format=atom");
@@ -159,7 +172,7 @@ public class SearchEngine {
 
 		String res = tobesplit.substring((i + l), sl);
 
-		if(withkeywords) return keywords + " " + res;
+		if(withkeywords) return keywords + res;
 			
 		return res;
 

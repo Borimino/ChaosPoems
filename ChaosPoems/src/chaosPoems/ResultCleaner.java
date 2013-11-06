@@ -99,6 +99,11 @@ public class ResultCleaner {
 			res = true;
 			
 		}
+		
+		if(containingline.equalsIgnoreCase(keywords)){
+			res = true;
+
+		}
 
 		return res;
 
