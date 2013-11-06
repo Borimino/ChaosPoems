@@ -48,14 +48,15 @@ public class SearchEngine {
 		ArrayList<String> temp = new ArrayList<String>(); 
 		
 		temp.addAll(xmlHandler.parseDocument(constructWikiURL("da", keywords)));
+		temp.addAll(xmlHandler.parseDocument(constructArchieveURL(keywords))); 
 		temp.addAll(xmlHandler.parseDocument(constructSindiceURL(keywords))); //Generates URL and parse it to XML handler, adds the resulting arraylist to an arraylist
+
 
 		
 		temp = resultCleaner.clean(temp, keywords); //Cleans the results
 
 		
 		for(String s : temp){
-			
 			res.add(resultsplitter(s, keywords));//Cuts off anything before keywords
 			
 		}
@@ -99,8 +100,43 @@ public class SearchEngine {
 		
 	}
 	
+	
 	/**
-	 * Constructs URL for sindiece search
+	 * Constructs URL for Archieve.org search
+	 * @param keywords
+	 * @return URL
+	 */
+	private URL constructArchieveURL(String keywords) {
+
+		String l = "";
+		try {
+			l = URLEncoder.encode(keywords, "UTF-8");
+		} catch (UnsupportedEncodingException e1) {
+			
+			l = keywords;
+			
+			e1.printStackTrace();
+		}
+		
+		String k = "\"" + l.toLowerCase().replaceAll(" ", "+") + "\"";
+		
+		
+		try {
+			URL url = new URL("http://archive.org/advancedsearch.php?q=" + k
+					+ "&fl%5B%5D=description&sort%5B%5D=&sort%5B%5D=&sort%5B%5D=&rows=50&page=1&callback=callback&output=xml#raw");
+			
+			return url;
+		
+		} catch (Exception e) {
+
+			e.printStackTrace();
+			return null;
+		}
+	}
+	
+	
+	/**
+	 * Constructs URL for Sindice search
 	 * @param keywords
 	 * @return URL
 	 */
@@ -122,7 +158,9 @@ public class SearchEngine {
 		try {
 			URL url = new URL("http://api.sindice.com/v2/search?q=" + k
 					+ "&qt=term&page=1&format=atom");
+			
 			return url;
+		
 		} catch (Exception e) {
 
 			e.printStackTrace();

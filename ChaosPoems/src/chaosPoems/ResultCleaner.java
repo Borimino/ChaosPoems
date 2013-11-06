@@ -18,8 +18,17 @@ public class ResultCleaner {
 		dirt[3] = "<b>...</b>";
 
 		// The lines which contains following strings will be deleted
-		linesToBeKilled = new String[1];
+		linesToBeKilled = new String[8];
 		linesToBeKilled[0] = "Sindice search:";
+		linesToBeKilled[1] = "OR description:";
+		linesToBeKilled[2] = "http://";
+		linesToBeKilled[3] = ".html";
+		linesToBeKilled[4] = "ä";
+		linesToBeKilled[5] = "Ã";
+		linesToBeKilled[6] = "¥";
+		linesToBeKilled[7] = "ö";
+		
+		
 
 	}
 
@@ -32,13 +41,12 @@ public class ResultCleaner {
 	public ArrayList<String> clean(ArrayList<String> dirtyresults, String keywords) {
 
 		ArrayList<String> res = new ArrayList<String>();
-
 		for (String s : dirtyresults) {
 
 			res.add(removeStrings(s)); // Removed unwanted caracters
 		}
 
-		// Kills results whichs doesnt live up to stadards
+		// Kills results whichs doesnt live up to standards
 		Iterator<String> itr = res.iterator();
 		while (itr.hasNext()) {
 			String s = (String) itr.next();
@@ -88,22 +96,20 @@ public class ResultCleaner {
 	 */
 	private Boolean shouldLineBeKilled(String containingline, String keywords) {
 		Boolean res = false;
-
-		for (String s : linesToBeKilled) {
+		
+		for (String s : linesToBeKilled) { //Checks if lines containes strings from linesToBeKilled
+			
 			if (containingline.toLowerCase().contains(s.toLowerCase())) {
 				res = true;
 			}
 		}
 		
-		if(!containingline.toLowerCase().contains(keywords.toLowerCase())){
-			res = true;
-			
-		}
+		if(!containingline.toLowerCase().contains(keywords.toLowerCase())) res = true;  //Check if lines contain keywords
 		
-		if(containingline.equalsIgnoreCase(keywords)){
-			res = true;
-
-		}
+		if(containingline.equalsIgnoreCase(keywords)) res = true; //Check if lines is different from keywords
+		
+		if((containingline.length()/keywords.length()) < 3) res = true; // Check length of lines
+		
 
 		return res;
 

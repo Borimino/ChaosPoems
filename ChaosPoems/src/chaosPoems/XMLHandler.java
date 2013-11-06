@@ -58,6 +58,7 @@ public class XMLHandler extends DefaultHandler {
 			ie.printStackTrace();
 		}
 			
+		
 		return snippets;
 		
 	}
@@ -85,6 +86,13 @@ public class XMLHandler extends DefaultHandler {
 
 		}
 
+		if (element.equalsIgnoreCase("str")) { //str is used in archieve.org
+
+			//Because of format of xml a StringBuffer is ues
+			int l = bufferString.length();
+			bufferString.delete(0, l); //REsets string buffer
+		}
+
 		if (element.equalsIgnoreCase("title")) { //Title is used in sindice
 
 			//Because of format of xml a StringBuffer is ues
@@ -103,6 +111,12 @@ public class XMLHandler extends DefaultHandler {
 			snippets.add(bufferString.toString()); 
 
 		}
+
+		if (element.equalsIgnoreCase("str")) {
+			snippets.add(bufferString.toString()); 
+
+		}
+
 	}
 /**
  *Reads caracters in the middle of tags
