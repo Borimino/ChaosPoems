@@ -12,7 +12,7 @@ public static void main(String[] args) {
 	
 	
 	
-	for(String s : se.search("han kan jo godt")){
+	for(String s : se.search("og det er ganske vist")){
 		
 		System.out.println(s);
 		
