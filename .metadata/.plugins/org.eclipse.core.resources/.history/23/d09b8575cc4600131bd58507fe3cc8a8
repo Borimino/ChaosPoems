@@ -1,0 +1,28 @@
+package chaosPoems;
+
+import java.net.URL;
+
+public class TestDriver { // PLEASE DELETE ME!
+
+	public static void main(String[] args) {
+
+		System.out.println("SØGNINGER");
+		SearchEngine se = new SearchEngine(false, 20, false);
+		se.search("som en");
+		System.out.println("========================");
+		System.out.println("XML:");
+		
+		//XMLHandler xh =  new XMLHandler();
+		//xh.parseDocument(URL xmllink = new URL(url)"http://da.wikipedia.org/w/api.php?action=query&list=search&srsearch="Som en%20&srprop=snippet&srwhat=text&format=xml
+		
+		//xh.parseDocument("wikitest.xml");
+		//xh.printlist();
+		
+		
+		
+		
+		
+		
+	}
+
+}

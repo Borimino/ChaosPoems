@@ -1,0 +1,165 @@
+package chaosPoems;
+
+import java.util.ArrayList;
+import java.net.MalformedURLException;
+import java.net.URL;
+
+public class SearchEngine {
+
+	private Boolean fromleft;
+	private Boolean withkeywords;
+	private int numberofresults;
+
+	XMLHandler xmlHandler;
+	ResultCleaner resultCleaner;
+
+	public SearchEngine(Boolean fromleft, int numberofresults,
+			Boolean withkeywords) {
+
+		this.fromleft = fromleft;
+		this.numberofresults = numberofresults;
+		this.withkeywords = withkeywords;
+		xmlHandler = new XMLHandler();
+		resultCleaner = new ResultCleaner();
+	}
+
+	public SearchEngine(int numberofresults) {
+
+		this(true, numberofresults, false);
+
+	}
+
+	/**
+	 * 
+	 * @param keywords
+	 * @return ArrayList with searchresults
+	 */
+	public ArrayList<String> search(String keywords) {
+
+		ArrayList<String> res = new ArrayList<String>(); // The final Arraylist with results
+		ArrayList<String> temp = new ArrayList<String>(); 
+		
+		temp.addAll(xmlHandler.parseDocument(constructSindiceURL(keywords))); //Generates URL and parse it to XML handler, adds the resulting arraylist to an arraylist
+		temp.addAll(xmlHandler.parseDocument(constructWikiURL("da", keywords)));
+		
+		temp = resultCleaner.clean(temp, keywords);
+
+		
+		for(String s : temp){
+			
+			//System.out.println(s = resultsplitter(s, keywords));
+			res.add(resultsplitter(s, keywords));
+			
+		}
+		
+		
+		//TESTPRINT
+		int l = 0;
+		for(String s : res){
+			
+			System.out.println(l + ": " + s);
+		l++;
+		}
+		
+		if(res.size() == 0) return cutOfKeywordsAndSearch(keywords);
+	
+		return res;
+	
+	}
+
+	private ArrayList<String> cutOfKeywordsAndSearch(String keywords){
+	
+		 String words[]= keywords.trim().split(" ");
+		
+		 if(words.length == 1) return null;
+
+		 System.out.println();
+		 
+		return new ArrayList<String>();
+		 
+	}
+
+	private String removeKeyword(String keywords){
+		
+		if(fromleft){
+			int i = keywords.indexOf(" ");
+			return keywords.substring(i+1);
+		}
+		return "";
+	}
+	
+	private URL constructSindiceURL(String keywords) {
+
+		String k = "\"" + keywords.replaceAll(" ", "+") + "\"";
+
+		try {
+			URL url = new URL("http://api.sindice.com/v2/search?q=" + k
+					+ "&qt=term&page=1&format=atom");
+			return url;
+		} catch (Exception e) {
+
+			e.printStackTrace();
+			return null;
+		}
+
+	}
+
+	private URL constructWikiURL(String domain, String keywords) {
+
+		String k = "%22" + keywords.replaceAll(" ", "%20") + "%22";
+
+		try {
+			URL url = new URL(
+					"http://"
+							+ domain
+							+ ".wikipedia.org/w/api.php?action=query&list=search&srsearch="
+							+ k + "&srprop=snippet&srwhat=text&format=xml");
+			return url;
+
+		} catch (MalformedURLException e) {
+
+			e.printStackTrace();
+			return null;
+		}
+
+	}
+
+	private String resultsplitter(String tobesplit, String keywords) {
+
+		int l = keywords.length();
+		int i = tobesplit.toLowerCase().indexOf(keywords.toLowerCase(), 0);
+		int sl = tobesplit.length();
+
+		String res = tobesplit.substring((i + l), sl);
+
+		if(withkeywords) return keywords + " " + res;
+			
+		return res;
+
+	}
+
+	public Boolean getFromleft() {
+		return fromleft;
+	}
+
+	public void setFromleft(Boolean fromleft) {
+		this.fromleft = fromleft;
+	}
+
+	public Boolean getwithkeywords() {
+		return withkeywords;
+	}
+
+	public void setwithkeywords(Boolean withkeywords) {
+		this.withkeywords = withkeywords;
+	}
+
+	public int getNumberofresults() {
+		return numberofresults;
+	}
+
+	public void setNumberofresults(int numberofresults) {
+		this.numberofresults = numberofresults;
+	}
+
+}

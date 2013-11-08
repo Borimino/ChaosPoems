@@ -12,6 +12,7 @@ public class SearchEngine {
 	private Boolean fromleft;
 	private Boolean withkeywords;
 	private int numberofresults;
+	private String language;
 
 	XMLHandler xmlHandler;
 	ResultCleaner resultCleaner;
@@ -20,10 +21,13 @@ public class SearchEngine {
  * @param fromleft Determines from which direction words will be removed in the event of no results
  * @param numberofresults Determines the max number of results.
  * @param withkeywords Determines weather or not the keywords will be in the beginning of the strings returned 
+ * @param language Used to declare the language, in the same format as wikipedias subdomain. eg da for Danish and en for english 
+ 
  */
-	public SearchEngine(Boolean fromleft, int numberofresults,
+	public SearchEngine(String language, Boolean fromleft, int numberofresults,
 			Boolean withkeywords) {
 
+		this.language = language;
 		this.fromleft = fromleft;
 		this.numberofresults = numberofresults;
 		this.withkeywords = withkeywords;
@@ -31,12 +35,15 @@ public class SearchEngine {
 		resultCleaner = new ResultCleaner();
 	}
 
+	
 	public SearchEngine(int numberofresults) {
 
-		this(true, numberofresults, false);
+		this("da", false, numberofresults, false);
 
 	}
 
+
+	
 	/**
 	 * 
 	 * Makes a search 
@@ -48,14 +55,10 @@ public class SearchEngine {
 		ArrayList<String> res = new ArrayList<String>(); // The final Arraylist with results
 		ArrayList<String> temp = new ArrayList<String>(); 
 		
-		temp.addAll(xmlHandler.parseDocument(constructWikiURL("da", keywords)));
-		temp.addAll(xmlHandler.parseDocument(constructArchieveURL(keywords))); 
-		temp.addAll(xmlHandler.parseDocument(constructSindiceURL(keywords))); //Generates URL and parse it to XML handler, adds the resulting arraylist to an arraylist
-
+		
+		temp = resultCleaner.clean(getResultsByLanguage(keywords), keywords); //Cleans the results
 
 		
-		temp = resultCleaner.clean(temp, keywords); //Cleans the results
-
 		
 		for(String s : temp){
 			res.add(resultsplitter(s, keywords));//Cuts off anything before keywords and shotenes the strings
@@ -63,12 +66,12 @@ public class SearchEngine {
 		}
 		
 		
-		// Kills results whichs matches keywords
+		// Kills results whichs matches keywords || are to short
 				Iterator<String> itr = res.iterator();
 				while (itr.hasNext()) {
 					String s = (String) itr.next();
 
-					if (s.equalsIgnoreCase(keywords)) {
+					if ((s.equalsIgnoreCase(keywords)) || ((s.length()/keywords.length()) < 3)) {
 						itr.remove();
 					}
 
@@ -82,6 +85,34 @@ public class SearchEngine {
 		return res;
 	
 	}
+	
+	private ArrayList<String> getResultsByLanguage(String keywords){
+		
+		ArrayList<String> res = new ArrayList<String>();
+		
+		
+		//Non language specifics
+		res.addAll(xmlHandler.parseDocument(constructWikiURL(language, keywords)));
+		res.addAll(xmlHandler.parseDocument(constructArchieveURL(keywords))); 
+		res.addAll(xmlHandler.parseDocument(constructSindiceURL(keywords))); //Generates URL and parse it to XML handler, adds the resulting arraylist to an arraylist
+		
+		
+		if(this.language.equalsIgnoreCase("da")){ //Danish Sources
+			
+			
+		} else if(this.language.equalsIgnoreCase("en")){ //English sources
+			
+			res.addAll(xmlHandler.parseDocument(constructGuardianURL(keywords))); 
+			
+			
+		}
+		
+		
+		
+		return res;
+		
+	}
+	
 
 	/**
 	 * 
@@ -146,6 +177,41 @@ public class SearchEngine {
 		}
 	}
 	
+	/**
+	 * Constructs URL for Guardian search
+	 * @param keywords
+	 * @return URL
+	 */
+	private URL constructGuardianURL(String keywords) {
+
+		String l = "";
+		try {
+			l = URLEncoder.encode(keywords, "UTF-8");
+		} catch (UnsupportedEncodingException e1) {
+			
+			l = keywords;
+			
+			e1.printStackTrace();
+		}
+		
+		String k = "%22" + l.toLowerCase().replaceAll(" ", "+") + "%22";
+		
+		
+		try {
+			URL url = new URL("http://content.guardianapis.com/search?q=" + k
+					+ "&format=xml&show-fields=all&show-factboxes=all&api-key=bs94nkjmxptm97zu94peu6eg");
+		
+			
+			return url;
+		
+		} catch (Exception e) {
+
+			e.printStackTrace();
+			return null;
+		}
+
+	}
+	
 	
 	/**
 	 * Constructs URL for Sindice search
@@ -198,6 +264,7 @@ public class SearchEngine {
 							+ domain
 							+ ".wikipedia.org/w/api.php?action=query&list=search&srsearch="
 							+ k + "&srprop=snippet&srwhat=text&format=xml");
+
 			return url;
 
 		} catch (MalformedURLException e) {

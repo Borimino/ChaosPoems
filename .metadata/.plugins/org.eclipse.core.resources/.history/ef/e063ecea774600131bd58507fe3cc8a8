@@ -1,0 +1,22 @@
+package chaosPoems;
+
+import java.util.ArrayList;
+
+public class ResultCleaner {
+
+	
+	public ArrayList<String> clean(ArrayList<String>[] dirtyresults){
+		
+		
+		
+		return ;
+	}
+	
+	private String vacuum(String character){
+		
+		
+		
+	}
+	
+	
+}

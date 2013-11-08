@@ -1,0 +1,22 @@
+package chaosPoems;
+
+
+
+
+public class XMLHandler extends DefaultHandler{
+
+
+	
+
+	public void handle(String filename) throws Exception{
+		
+		
+	    
+		XMLReader xr = XMLReaderFactory.createXMLReader();
+	    
+		
+	}
+	
+	
+	
+}

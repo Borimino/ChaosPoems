@@ -1,0 +1,67 @@
+package chaosPoems;
+
+import java.util.ArrayList;
+
+public class ResultCleaner {
+
+	private String[] dirt;
+	private String[] linesToBeKilled;
+
+	public ResultCleaner() {
+
+		// Array with strings to be removed
+		dirt = new String[4];
+		dirt[0] = "span";
+		dirt[1] = "span";
+		dirt[2] = "span";
+
+		// The lines which contains following strings will be deleted
+		linesToBeKilled = new String[1];
+		linesToBeKilled[0] = "Sindice search:";
+
+	}
+
+	public ArrayList<String> clean(ArrayList<ArrayList<String>> dirtyresults) {
+
+		ArrayList<String> res = new ArrayList<String>();
+
+		for (ArrayList<String> a : dirtyresults) { // Adds all results to one
+													// ArrayList
+
+			res.addAll(a);
+
+		}
+
+		for (String s : res) {
+
+			s = removeStrings(s); // Removed unwanted caracters
+
+		}
+
+		return res;
+	}
+
+	private Boolean shouldLineBeKilled(String s) {
+
+		return true;
+	}
+
+	private String removeStrings(String dirtystring) {
+
+		for (int i = 0; i < dirt.length; i++) {
+
+			dirtystring = vacuum(dirtystring, dirt[i]);
+
+		}
+
+		return dirtystring;
+
+	}
+
+	private String vacuum(String dirtystring, String unwantedstring) {
+
+		return dirtystring.replaceAll(unwantedstring, "");
+
+	}
+
+}
