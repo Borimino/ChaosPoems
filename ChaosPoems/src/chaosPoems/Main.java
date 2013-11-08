@@ -42,7 +42,7 @@ public class Main
 		while(!done)
 		{
 			i = s.indexOf(" ", i);
-			if(isSmall(s.substring(i, s.indexOf(" ", i))))
+			if(i < 0 || isSmall(s.substring(i, s.indexOf(" ", i))))
 			{
 				done = true;
 			}
@@ -64,10 +64,18 @@ public class Main
 		{
 			i = (int) (Math.random()*(s.length()*0.6));
 			i = s.indexOf(" ", i);
-			res[0] = s.substring(0, i);
-			int end = s.indexOf(" ", i+5);
-			res[1] = s.substring(i, end);
-			res[2] = s.substring(end);
+			if(i > 0)
+			{
+				res[0] = s.substring(0, i);
+				int end = s.indexOf(" ", i+5);
+				res[1] = s.substring(i, end);
+				res[2] = s.substring(end);
+			} else
+			{
+				res[0] = s;
+				res[1] = "";
+				res[2] = "";
+			}
 		}
 		
 		return res;

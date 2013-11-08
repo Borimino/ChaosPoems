@@ -9,6 +9,10 @@ public class Searcher
 		/*
 		 * Skal søge med G74un3's søgefunktion
 		 */
+		if(s.equals(""))
+		{
+			return new String[] {""};
+		}
 		String[] res;
 		SearchEngine se = new SearchEngine(false, 20, true);
 		res = se.search(s).toArray(new String[0]);
@@ -21,7 +25,8 @@ public class Searcher
 		 * Skal udvælge fra søgeresultaterne
 		 */
 		String res;
-		res = s[0];
+		int i = (int) (Math.random()*s.length);
+		res = s[i];
 		System.out.println(res);
 		return res;
 	}
