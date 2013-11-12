@@ -33,7 +33,8 @@ public class Main
 	
 	private boolean isSmall(String s)
 	{
-		return s.length() <= 3;
+		//System.out.println(s);
+		return s.matches("[\\D]{0,3}");
 	}
 	
 	public String[] end(String s)
@@ -48,8 +49,8 @@ public class Main
 		boolean done = false;
 		while(!done)
 		{
-			i = s.indexOf(" ", i);
-			if(i < 0 || isSmall(s.substring(i, s.indexOf(" ", i))))
+			i = s.indexOf(" ", i+1);
+			if(i < 0 || isSmall(s.substring(i+1, s.indexOf(" ", i+1))))
 			{
 				done = true;
 			}
@@ -57,7 +58,7 @@ public class Main
 		if(i > 0)
 		{
 			res[0] = s.substring(0, i);
-			int end = s.indexOf(" ", i+10);
+			int end = s.indexOf(" ", i+20);
 			if(end > 0)
 			{
 				res[1] = s.substring(i, end);

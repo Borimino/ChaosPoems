@@ -11,10 +11,12 @@ public class ResultCleaner {
 	public ResultCleaner() {
 
 		// Array with strings to be removed
-		dirt = new String[3];
+		dirt = new String[5];
 		dirt[0] = "<span class='searchmatch'>";
 		dirt[1] = "</span>";
 		dirt[2] = "\"";
+		dirt[3] = "\\.\\.\\.";
+		dirt[4] = "\\[.*\\]";
 
 		
 		
@@ -26,15 +28,15 @@ public class ResultCleaner {
 		linesToBeKilled[1] = "OR description:";
 		linesToBeKilled[2] = "http://";
 		linesToBeKilled[3] = ".html";
-		linesToBeKilled[4] = "ä";
-		linesToBeKilled[5] = "Ã";
-		linesToBeKilled[6] = "¥";
-		linesToBeKilled[7] = "ö";
+		linesToBeKilled[4] = "ï¿½";
+		linesToBeKilled[5] = "ï¿½";
+		linesToBeKilled[6] = "ï¿½";
+		linesToBeKilled[7] = "ï¿½";
 		linesToBeKilled[8] = "forgjeves";
 		linesToBeKilled[9] = "blitt ";
 		linesToBeKilled[10] = "och ";
-		linesToBeKilled[11] = "gjør";
-		linesToBeKilled[12] = "gjør";
+		linesToBeKilled[11] = "gjï¿½r";
+		linesToBeKilled[12] = "gjï¿½r";
 		linesToBeKilled[13] = " av ";
 
 		
@@ -54,7 +56,6 @@ public class ResultCleaner {
 
 		ArrayList<String> res = new ArrayList<String>();
 		for (String s : dirtyresults) {
-
 			res.add(removeStrings(s)); // Removed unwanted caracters
 		}
 
@@ -136,7 +137,7 @@ public class ResultCleaner {
 		
 		if((containingline.length()/keywords.length()) < 3) res = true; // Check length of lines
 		
-		if(!containingline.contains(".")) res = true;
+		if(!containingline.contains(".")) res = true; // Check if line does not contain a dot
 
 		return res;
 

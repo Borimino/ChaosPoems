@@ -1,39 +1,51 @@
 package chaosPoems;
 
+import java.util.ArrayList;
+
 public class Searcher
 {
 	SearchEngine se;
 	
 	public Searcher()
 	{
-		se = new SearchEngine(false, 20, true);
+		se = new SearchEngine("da", false, 20, true);
 	}
 	
-	public String language = "da";
-	
-	public String[] search(String s)
+	public ArrayList<String> search(String s)
 	{
 		/*
 		 * Skal søge med G74un3's søgefunktion
 		 */
 		if(s.equals(""))
 		{
-			return new String[] {""};
+			ArrayList<String> res = new ArrayList<String>();
+			res.add(" ");
+			return res;
 		}
-		String[] res;
-		res = se.search(s).toArray(new String[0]);
+		ArrayList<String> res;
+		res = se.search(s);
 		return res;
 	}
 	
-	public String select(String[] s)
+	public String select(ArrayList<String> s)
 	{
 		/*
 		 * Skal udvælge fra søgeresultaterne
 		 */
 		String res;
-		int i = (int) (Math.random()*s.length);
-		res = s[i];
+		int i = (int) (Math.random()*s.size());
+		res = s.get(i);
+		if(s.size() > 1 && res.matches(".*\\.\\..*"))
+		{
+			s.remove(i);
+			res = select(s);
+		}
 		System.out.println(res);
 		return res;
+	}
+	
+	public SearchEngine getSe()
+	{
+		return se;
 	}
 }

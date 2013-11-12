@@ -1,11 +1,11 @@
 package chaosPoems;
 
-import java.util.ArrayList;
-import java.util.Iterator;
 import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLEncoder;
+import java.util.ArrayList;
+import java.util.Iterator;
 
 public class SearchEngine {
 
@@ -89,7 +89,6 @@ public class SearchEngine {
 	private ArrayList<String> getResultsByLanguage(String keywords){
 		
 		ArrayList<String> res = new ArrayList<String>();
-		
 		
 		//Non language specifics
 		res.addAll(xmlHandler.parseDocument(constructWikiURL(language, keywords)));
@@ -300,7 +299,7 @@ public class SearchEngine {
 			
 			d = temp.lastIndexOf("|");
 
-		} else if(temp.length() > 1000) { // Hvis længden er større en 1000 cut ved 1 punktum
+		} else if(temp.length() > 1000) { // Hvis lï¿½ngden er stï¿½rre en 1000 cut ved 1 punktum
 			
 			d = temp.indexOf('.');
 			
@@ -389,6 +388,16 @@ public class SearchEngine {
 	 */
 	public void setNumberofresults(int numberofresults) {
 		this.numberofresults = numberofresults;
+	}
+	
+	public void setLanguage(String language)
+	{
+		this.language = language;
+	}
+	
+	public String getLanguage()
+	{
+		return language;
 	}
 
 }

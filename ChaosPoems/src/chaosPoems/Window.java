@@ -7,7 +7,6 @@ import java.awt.event.ActionListener;
 import javax.swing.ButtonGroup;
 import javax.swing.JButton;
 import javax.swing.JFrame;
-import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.JTextArea;
@@ -23,6 +22,7 @@ public class Window implements ActionListener
 	JPanel radios;
 	JRadioButton danish;
 	JRadioButton english;
+	JRadioButton german;
 	JPanel inputArea;
 	Main main;
 	
@@ -95,14 +95,20 @@ public class Window implements ActionListener
 		english.addActionListener(this);
 		radios.add(english);
 		
+		german = new JRadioButton("Deutsch");
+		german.setActionCommand("en");
+		german.addActionListener(this);
+		radios.add(german);
+		
 		ButtonGroup group = new ButtonGroup();
 		group.add(danish);
 		group.add(english);
+		group.add(german);
 	}
 
 	@Override
 	public void actionPerformed(ActionEvent e)
 	{
-		main.getSearcher().language = e.getActionCommand();
+		main.getSearcher().getSe().setLanguage(e.getActionCommand());
 	}
 }
