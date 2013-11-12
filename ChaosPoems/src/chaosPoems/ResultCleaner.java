@@ -11,14 +11,10 @@ public class ResultCleaner {
 	public ResultCleaner() {
 
 		// Array with strings to be removed
-		dirt = new String[7];
+		dirt = new String[3];
 		dirt[0] = "<span class='searchmatch'>";
 		dirt[1] = "</span>";
 		dirt[2] = "\"";
-		dirt[3] = "<b>...</b>";
-		dirt[4] = "</div>";
-		dirt[5] = "<br />";
-		dirt[6] = "<div>";
 
 		
 		
@@ -70,8 +66,8 @@ public class ResultCleaner {
 			if (shouldLineBeKilled(s, keywords)) {
 				itr.remove();
 			}
-
 		}
+
 
 		return res;
 	}
@@ -86,6 +82,7 @@ public class ResultCleaner {
 		for (int i = 0; i < dirt.length; i++) {
 
 			dirtystring = vacuum(dirtystring, dirt[i]);
+			dirtystring = removeHTML(dirtystring);
 
 		}
 
@@ -101,10 +98,23 @@ public class ResultCleaner {
 	 */
 	private String vacuum(String dirtystring, String unwantedstring) {
 
+		
 		return dirtystring.replaceAll(unwantedstring, "");
 
 	}
 
+	
+	/**
+	 * 
+	 * @param dirtystring
+	 * @return A clean string
+	 */
+	public String removeHTML(String dirtystring){
+		
+		return dirtystring.replaceAll("<[^>]*>", "");	
+	}
+	
+	
 	/**
 	 * Decides weather or not a string should be killed
 	 * @param containingline the whole string 

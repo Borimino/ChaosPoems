@@ -1,0 +1,24 @@
+package chaosPoems;
+
+public class TestDriver { // PLEASE DELETE ME!
+
+	public static void main(String[] args) {
+
+		System.out.println("SØGNINGER");
+		SearchEngine se = new SearchEngine(true, 20, false);
+		se.Search("Som en");
+		System.out.println("========================");
+		System.out.println("XML:");
+		
+		XMLHandler xh =  new XMLHandler();
+		xh.parseDocument();
+		
+		
+		
+		
+		
+		
+		
+	}
+
+}

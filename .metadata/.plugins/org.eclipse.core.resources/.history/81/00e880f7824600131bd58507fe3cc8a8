@@ -1,0 +1,118 @@
+package chaosPoems;
+
+import java.util.ArrayList;
+import java.net.MalformedURLException;
+import java.net.URL;
+
+public class SearchEngine {
+
+	private Boolean fromleft;
+	private Boolean withkeywords;
+	private int numberofresults;
+	
+	XMLHandler xmlHandler;
+	ResultCleaner resultCleaner;
+
+	public SearchEngine(Boolean fromleft, int numberofresults,
+			Boolean withkeywords) {
+
+		this.fromleft = fromleft;
+		this.numberofresults = numberofresults;
+		this.withkeywords = withkeywords;
+		xmlHandler = new XMLHandler();
+		resultCleaner = new ResultCleaner();
+	}
+
+	public SearchEngine(int numberofresults) {
+
+		this(true, numberofresults, false);
+
+	}
+
+
+	
+	
+	public ArrayList<String> search(String keywords) {
+
+		ArrayList<String> res = new ArrayList<String>(); // The final Arraylist with results
+		ArrayList<ArrayList<String>> bareresults = new ArrayList<ArrayList<String>>(); // Arraylist of arraylists with raw results
+		System.out.println(xmlHandler.parseDocument(constructSindiceURL(keywords)));
+		bareresults.add(xmlHandler.parseDocument(constructSindiceURL(keywords))); //Generates URL and parse it to XML handler, adds the resulting arraylist to an arraylist
+		bareresults.add(xmlHandler.parseDocument(constructWikiURL("da", keywords)));
+		
+		
+		res = resultCleaner.clean(bareresults);
+
+		
+		int i = 0;
+		for(String s : res){
+			
+			System.out.println(i + ": " + s);
+		i++;
+		}
+		
+		
+		
+		return res;
+	}
+
+	private URL constructSindiceURL(String keywords) {
+
+		String k = "\"" + keywords.replaceAll(" ", "+") + "\"";
+
+
+		try {
+			URL url = new URL("http://api.sindice.com/v2/search?q=" + k + "&qt=term&page=1&format=atom");
+		return url;
+		} catch (Exception e) {
+			
+			e.printStackTrace();
+		return null;
+		}
+
+	}
+	
+	private URL constructWikiURL(String domain, String keywords) {
+
+		String k = "%22" + keywords.replaceAll(" ", "%20") + "%22";
+
+		
+		try {
+			URL url = new URL("http://" + domain + ".wikipedia.org/w/api.php?action=query&list=search&srsearch=" + k + "&srprop=snippet&srwhat=text&format=xml");
+			return url;
+
+		} catch (MalformedURLException e) {
+			
+			e.printStackTrace();
+			return null;
+		}
+		
+		
+	}
+
+
+	public Boolean getFromleft() {
+		return fromleft;
+	}
+
+	public void setFromleft(Boolean fromleft) {
+		this.fromleft = fromleft;
+	}
+
+	public Boolean getwithkeywords() {
+		return withkeywords;
+	}
+
+	public void setwithkeywords(Boolean withkeywords) {
+		this.withkeywords = withkeywords;
+	}
+
+	public int getNumberofresults() {
+		return numberofresults;
+	}
+
+	public void setNumberofresults(int numberofresults) {
+		this.numberofresults = numberofresults;
+	}
+
+}

@@ -97,7 +97,14 @@ public class XMLHandler extends DefaultHandler {
 		}
 
 		if (element.equalsIgnoreCase("title")) { //Title is used in sindice
+			
+			//Because of format of xml a StringBuffer is ues
+			int l = bufferString.length();
+			bufferString.delete(0, l); //REsets string buffer
+		}
 
+		if (element.equalsIgnoreCase("field")) { //Field is used in guardian
+			
 			//Because of format of xml a StringBuffer is ues
 			int l = bufferString.length();
 			bufferString.delete(0, l); //REsets string buffer
@@ -109,7 +116,7 @@ public class XMLHandler extends DefaultHandler {
 	 * Called automatically every time and end-tag is discovered
 	 */
 	public void endElement(String uri, String localName, String element) {
-
+		
 		if (element.equalsIgnoreCase("title")) {
 			snippets.add(bufferString.toString()); 
 
@@ -117,7 +124,10 @@ public class XMLHandler extends DefaultHandler {
 
 		if (element.equalsIgnoreCase("str")) {
 			snippets.add(bufferString.toString()); 
-
+			
+		}
+		if (element.equalsIgnoreCase("field")) {
+			snippets.add(bufferString.toString()); 
 		}
 
 	}

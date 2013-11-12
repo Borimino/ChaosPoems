@@ -1,0 +1,122 @@
+package chaosPoems;
+
+import java.lang.StringBuffer;
+import java.net.URL;
+import java.io.IOException;
+import java.util.ArrayList;
+
+import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.parsers.SAXParser;
+import javax.xml.parsers.SAXParserFactory;
+
+import org.xml.sax.Attributes;
+import org.xml.sax.InputSource;
+import org.xml.sax.SAXException;
+import org.xml.sax.helpers.DefaultHandler;
+
+public class XMLHandler extends DefaultHandler {
+
+
+	
+	private ArrayList<String> snippets;
+	private String tempSnippet;
+	private StringBuffer bufferString;
+
+	public XMLHandler() {
+
+		snippets = new ArrayList<String>();
+		bufferString = new StringBuffer();
+
+	}
+
+	/**
+	 * Resonsible for parsing the document
+	 */
+	public void parseDocument(URL url) {
+		
+		// Adds a factory
+		SAXParserFactory factory = SAXParserFactory.newInstance();
+
+		try {
+
+			// adds a new instance of parser
+			SAXParser parser = factory.newSAXParser();
+
+			//TODO SHOULD THIS BE MOVED TO MORE PROPER PLACE?
+			//Sets user Agent
+			System.setProperty("http.agent", "ChaosPoemSearch");
+			
+			//Contructs url and stream xml to parser 
+			URL xmllink = url;
+			parser.parse(new InputSource(xmllink.openStream()), this);
+
+		} catch (SAXException se) {
+			se.printStackTrace();
+		} catch (ParserConfigurationException pce) {
+			pce.printStackTrace();
+		} catch (IOException ie) {
+			ie.printStackTrace();
+		}
+
+	}
+
+	/**
+	 * Prints the Arraylist
+	 */
+	public void printlist() {
+
+		for (String l : snippets) {
+			System.out.println(l);
+		}
+	}
+
+	// Event handlers
+
+	/**
+	 * Called automaticly every time start-tag i discovered
+	 */
+	public void startElement(String uri, String localName, String element,
+			Attributes attributes) throws SAXException {
+		tempSnippet = "";
+		if (element.equalsIgnoreCase("p")) { // p is used in SIndice xml files
+			tempSnippet = attributes.getValue("snippet");
+			snippets.add(tempSnippet);
+
+		}
+
+		if (element.equalsIgnoreCase("title")) { //Title is used in wikipedia
+
+			//Because of format of xml a StringBuffer is ues
+			int l = bufferString.length();
+			bufferString.delete(0, l); //REsets string buffer
+		}
+
+	}
+
+	/**
+	 * Called automatically every time and end-tag is discovered
+	 */
+	public void endElement(String uri, String localName, String element) {
+
+		if (element.equalsIgnoreCase("title")) {
+			snippets.add(bufferString.toString()); 
+
+		}
+	}
+/**
+ *Reads caracters in the middle of tags
+ */
+	@Override
+	public void characters(char[] ch, int start, int length)
+			throws SAXException {
+
+		// tempTitle = new String(ch, start, length);
+		int l = bufferString.length();
+		bufferString.insert(l, new String(ch, start, length)); // Inserts
+																// characters as
+																// string in end
+																// of buffer
+
+	}
+
+}
