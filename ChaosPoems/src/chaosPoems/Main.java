@@ -2,19 +2,26 @@ package chaosPoems;
 
 public class Main
 {
-	public static String generate(String s)
+	private Searcher searcher;
+	
+	public Main()
+	{
+		searcher = new Searcher();
+	}
+	
+	public String generate(String s)
 	{
 		String res = new String("");
 		String[] lines = lines(s);
 		for(int i = 0; i < lines.length; i++)
 		{
 			String[] line = end(lines[i]);
-			res = res + " " + line[0] + Searcher.select(Searcher.search(line[1]));
+			res = res + " " + line[0] + getSearcher().select(getSearcher().search(line[1]));
 		}
 		return res;
 	}
 	
-	public static String[] lines(String s)
+	public String[] lines(String s)
 	{
 		/*
 		 * Skal muligvis splitte på andre steder. Tror jeg dog ikke
@@ -24,12 +31,12 @@ public class Main
 		return res;
 	}
 	
-	private static boolean isSmall(String s)
+	private boolean isSmall(String s)
 	{
 		return s.length() <= 3;
 	}
 	
-	public static String[] end(String s)
+	public String[] end(String s)
 	{
 		/*
 		 * Skal helt klart ændres
@@ -79,5 +86,10 @@ public class Main
 		}
 		
 		return res;
+	}
+
+	public Searcher getSearcher()
+	{
+		return searcher;
 	}
 }

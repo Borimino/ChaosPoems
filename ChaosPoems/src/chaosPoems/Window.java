@@ -24,10 +24,11 @@ public class Window implements ActionListener
 	JRadioButton danish;
 	JRadioButton english;
 	JPanel inputArea;
+	Main main;
 	
 	public Window()
 	{
-		
+		main = new Main();
 	}
 	
 	public void drawWindow()
@@ -63,7 +64,7 @@ public class Window implements ActionListener
 			{
 				public void actionPerformed(ActionEvent e)
 				{
-					output.setText(Main.generate(input.getText()));
+					output.setText(main.generate(input.getText()));
 				}
 			});
 		clear = new JButton("Clear");
@@ -102,6 +103,6 @@ public class Window implements ActionListener
 	@Override
 	public void actionPerformed(ActionEvent e)
 	{
-		Searcher.language = e.getActionCommand();
+		main.getSearcher().language = e.getActionCommand();
 	}
 }
