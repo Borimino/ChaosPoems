@@ -1,5 +1,6 @@
 package chaosPoems;
 
+<<<<<<< HEAD
 public class Testdriver {
 
 public static void main(String[] args) {
@@ -24,10 +25,29 @@ public static void main(String[] args) {
 		
 		System.out.println(s);
 		
+=======
+public class Testdriver
+{
+
+	public static void main(String[] args)
+	{
+
+		SearchEngine se = new SearchEngine("da", false, 50000, true);
+
+		System.out.println("================================================");
+		System.out.println("DRIVER PRINT:");
+
+		for (String s : se.search("som er"))
+		{
+
+			System.out.println(s);
+
+		}
+
+		System.out
+				.println("====================================================================");
+
+>>>>>>> 475d4e3a1c7ecac6b866036f856f7336c09a3a6f
 	}
-	
-	System.out.println("====================================================================");
-	
-}
-	
+
 }
