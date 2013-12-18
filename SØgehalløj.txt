@@ -1,3 +1,0 @@
-System.setProperty("http.agent", "ChaosPoemSearch");
-
-http://blog.faroo.com/2013/06/30/faroo-introduces-an-api-key/
